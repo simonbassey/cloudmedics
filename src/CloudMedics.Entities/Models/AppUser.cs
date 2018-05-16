@@ -17,7 +17,10 @@ namespace CloudMedics.Entities
         [Required]
         public string PhoneNumber { get; set; }
         public AccountType AccountType { get; set; }
+        public AccountStatus AccountStatus { get; set; }
+        [Required]
         public DateTime Created { get; set; }
+        [Required]
         public DateTime LastUpdate { get; set; }
         [Required]
         public string CreatedBy { get; set; }
