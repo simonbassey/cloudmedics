@@ -20,12 +20,12 @@ namespace CloudMedics.Data
             throw new NotImplementedException();
         }
 
-        public Task<int> Add(ICollection<T> entities)
+        public virtual Task<int> Add(ICollection<T> entities)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> Delete(int id)
+        public Task<bool> Delete(object key)
         {
             throw new NotImplementedException();
         }
@@ -35,22 +35,17 @@ namespace CloudMedics.Data
             throw new NotImplementedException();
         }
 
-        public virtual Task<T> Get(int entityId)
+        public virtual async Task<T> Get(object entityId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> Get(string entityId)
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public virtual Task<IEnumerable<T>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> Update(T updatedEntity)
+        public virtual async Task<T> Update(T updatedEntity)
         {
             throw new NotImplementedException();
         }
