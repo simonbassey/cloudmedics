@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using CloudMedics.Entities.Enumerations;
+using CloudMedics.Domain.Enumerations;
 
-namespace CloudMedics.Entities.Models
+namespace CloudMedics.Domain.Models
 {
     public class Appointment
     {

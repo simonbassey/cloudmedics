@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CloudMedics.Entities.Models
+namespace CloudMedics.Domain.Models
 {
     public class Doctor
     {

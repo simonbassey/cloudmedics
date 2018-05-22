@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Entities", "src\CloudMedics.Entities\CloudMedics.Entities.csproj", "{A45BEA3F-412F-47C3-AD90-D6FEA876620F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Domain", "src\CloudMedics.Entities\CloudMedics.Domain.csproj", "{A45BEA3F-412F-47C3-AD90-D6FEA876620F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Data", "src\CloudMedics.Data\CloudMedics.Data.csproj", "{199B6FEF-C365-4C3B-92E0-69AF2693F072}"
 EndProject

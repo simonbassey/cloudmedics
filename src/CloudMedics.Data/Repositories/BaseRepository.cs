@@ -40,6 +40,11 @@ namespace CloudMedics.Data
             throw new NotImplementedException();
         }
 
+        public Task<T> Get(string entityId)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual Task<IEnumerable<T>> GetAll()
         {
             throw new NotImplementedException();

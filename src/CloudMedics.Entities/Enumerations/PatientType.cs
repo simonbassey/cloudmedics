@@ -1,5 +1,5 @@
 ﻿using System;
-namespace CloudMedics.Entities.Enumerations
+namespace CloudMedics.Domain.Enumerations
 {
     public enum PatientType
     {
