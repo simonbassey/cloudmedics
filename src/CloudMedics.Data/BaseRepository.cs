@@ -20,6 +20,16 @@ namespace CloudMedics.Data
             throw new NotImplementedException();
         }
 
+        public Task<int> Add(ICollection<T> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual Task<IEnumerable<T>> Filter(Func<T, bool> predicate)
         {
             throw new NotImplementedException();
@@ -31,6 +41,11 @@ namespace CloudMedics.Data
         }
 
         public virtual Task<IEnumerable<T>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> Update(T updatedEntity)
         {
             throw new NotImplementedException();
         }
