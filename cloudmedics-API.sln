@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Domain", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Data", "src\CloudMedics.Data\CloudMedics.Data.csproj", "{199B6FEF-C365-4C3B-92E0-69AF2693F072}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouldMedics.Services", "src\CouldMedics.Services\CouldMedics.Services.csproj", "{0AF45208-E02A-4437-9CB1-266C291266C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.API", "src\CloudMedics.API\CloudMedics.API.csproj", "{71D62906-C271-4858-AAFC-AADB33407348}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +23,13 @@ Global
 		{199B6FEF-C365-4C3B-92E0-69AF2693F072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{199B6FEF-C365-4C3B-92E0-69AF2693F072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{199B6FEF-C365-4C3B-92E0-69AF2693F072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AF45208-E02A-4437-9CB1-266C291266C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AF45208-E02A-4437-9CB1-266C291266C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AF45208-E02A-4437-9CB1-266C291266C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AF45208-E02A-4437-9CB1-266C291266C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71D62906-C271-4858-AAFC-AADB33407348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D62906-C271-4858-AAFC-AADB33407348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D62906-C271-4858-AAFC-AADB33407348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D62906-C271-4858-AAFC-AADB33407348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
