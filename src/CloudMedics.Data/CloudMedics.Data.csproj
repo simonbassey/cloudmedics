@@ -8,6 +8,11 @@
     <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudMedics.Entities\CloudMedics.Entities.csproj" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CloudMedics.Entities\CloudMedics.Domain.csproj" />
   </ItemGroup>
 </Project>
