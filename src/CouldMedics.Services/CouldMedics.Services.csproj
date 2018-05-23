@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CloudMedics.Entities\CloudMedics.Domain.csproj" />
+    <ProjectReference Include="..\CloudMedics.Data\CloudMedics.Data.csproj" />
+  </ItemGroup>
 </Project>
