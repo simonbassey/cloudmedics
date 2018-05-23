@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CloudMedics.Domain;
+using CloudMedics.Domain.Models;
 
 namespace CloudMedics.Data.Repositories
 {

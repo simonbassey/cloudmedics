@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CloudMedics.Domain.Enumerations;
 
-namespace CloudMedics.Domain
+namespace CloudMedics.Domain.Models
 {
     public class AppUser {
 
