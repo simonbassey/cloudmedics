@@ -6,10 +6,10 @@ namespace CloudMedics.Data
 {
     public class CloudMedicDbContext:DbContext
     {
+        public CloudMedicDbContext(){}
         public CloudMedicDbContext(DbContextOptions options) : base(options)
         {
         }
-
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
             modelBuilder.Entity<Appointment>().HasKey(e => new { e.PatientId, e.DoctorId });

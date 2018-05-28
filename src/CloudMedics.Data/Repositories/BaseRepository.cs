@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CloudMedics.Data
@@ -10,44 +11,114 @@ namespace CloudMedics.Data
         {
         }
 
-        public virtual Task<T> Add(T entity)
+        public virtual async Task<T> Add(T entity)
         {
-            throw new NotImplementedException();
+            try{
+                using(var dbContext = new CloudMedicDbContext()){
+                    await dbContext.Set<T>().AddAsync(entity);
+                    await dbContext.SaveChangesAsync();
+                    return entity;
+                }
+            }
+            catch(Exception exception){
+                throw;
+            }
         }
 
-        public virtual Task<int> Add(IEnumerable<T> tEntities)
+        public virtual async Task<int> Add(IEnumerable<T> tEntities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    await dbContext.Set<T>().AddRangeAsync(tEntities);
+                    return await dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
         }
 
-        public virtual Task<int> Add(ICollection<T> entities)
+        public virtual async Task<bool> Delete(object key)
         {
-            throw new NotImplementedException();
+            try{
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    var existingEntity = await dbContext.Set<T>().FindAsync(key);
+                    if (existingEntity == null)
+                        return true;
+                    dbContext.Set<T>().Remove(existingEntity);
+                    return (await dbContext.SaveChangesAsync()) == 1;
+                }
+            }
+            catch(Exception exception){
+                throw;
+            }
         }
 
-        public Task<bool> Delete(object key)
+        public virtual async Task<IEnumerable<T>> Filter(Func<T, bool> predicate)
         {
-            throw new NotImplementedException();
-        }
-
-        public virtual Task<IEnumerable<T>> Filter(Func<T, bool> predicate)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    return await Task.FromResult(dbContext.Set<T>().Where(predicate));
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
         }
 
         public virtual async Task<T> Get(object entityId)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    return await dbContext.Set<T>().FindAsync(entityId);
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
         }
 
-        public virtual async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<List<T>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    return await Task.FromResult(dbContext.Set<T>().ToList());
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
         }
 
         public virtual async Task<T> Update(T updatedEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var dbContext = new CloudMedicDbContext())
+                {
+                    dbContext.Entry<T>(updatedEntity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    await dbContext.SaveChangesAsync();
+                    return updatedEntity;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
         }
     }
 }
