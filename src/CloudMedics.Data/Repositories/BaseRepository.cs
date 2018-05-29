@@ -64,7 +64,7 @@ namespace CloudMedics.Data
             {
                 using (var dbContext = new CloudMedicDbContext())
                 {
-                    return await Task.FromResult(dbContext.Set<T>().Where(predicate));
+                    return await Task.FromResult(dbContext.Set<T>().Where(predicate).ToList());
                 }
             }
             catch (Exception exception)
