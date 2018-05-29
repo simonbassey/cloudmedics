@@ -40,10 +40,15 @@ namespace CloudMedics.API.Controllers
             }
         }
 
-
+        /// <summary>
+        ///  Creates a new user account.
+        /// </summary>
+        /// <returns>The account.</returns>
+        /// <param name="user">User.</param>
         [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] AppUser user)
         {
+            //Todo: Create a user model to control amount of information received by users
             try
             {
                 if (!ModelState.IsValid)
