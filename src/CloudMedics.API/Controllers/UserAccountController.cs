@@ -1,46 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using CloudMedics.Domain.Enumerations;
+using CloudMedics.Domain.Models;
+using CouldMedics.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CloudMedics.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users/account")]
     public class UserAccountController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IUserService userService;
+        public UserAccountController(IUserService userService_)
         {
-            return new string[] { "value1", "value2" };
+            userService = userService_;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        /// <summary>
+        /// Gets user accounts.
+        /// </summary>
+        /// <returns>The user accounts.</returns>
+        [HttpGet("")]
+        public async Task<IActionResult> GetUserAccounts()
         {
-            return "value";
+            try
+            {
+                var userAccounts = await userService.GetUsersAsync();
+                return Ok(userAccounts);
+            }
+            catch (Exception exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, exception);
+            }
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAccount([FromBody] AppUser user)
         {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+                UpdateAnonymouseUserRegistrationData(ref user);
+                var newAccount = await userService.CreateUserAsync(user);
+                return newAccount != null ? Ok(newAccount) : StatusCode((int)HttpStatusCode.Conflict, "Failed to create user account");
+
+            }
+            catch (Exception exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, exception);
+            }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        #region privates
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+        private void UpdateAnonymouseUserRegistrationData(ref AppUser newUserData) {
+            newUserData.AccountType = AccountType.Patient;
+            newUserData.Created = DateTime.Now;
+            newUserData.LastUpdate = DateTime.Now;
+            newUserData.CreatedBy = "System";
         }
+        #endregion
     }
 }
