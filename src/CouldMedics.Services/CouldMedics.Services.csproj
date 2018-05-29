@@ -8,4 +8,7 @@
     <ProjectReference Include="..\CloudMedics.Entities\CloudMedics.Domain.csproj" />
     <ProjectReference Include="..\CloudMedics.Data\CloudMedics.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+  </ItemGroup>
 </Project>
