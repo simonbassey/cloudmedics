@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudMedics.Domain.Models;
 
@@ -14,6 +15,7 @@ namespace CloudMedics.Data.Repositories
         Task<AppUser> UpdateUserAccountAsync(string userId, AppUser updatedUser);
         Task<bool> DeleteUserAccountAsync(string userId);
         Task<IEnumerable<AppUser>> FilterUsersAsync(Func<AppUser, bool> filterFn);
+        Task<bool> UserAccountExistAsync(string userId);
 
     }
 
@@ -58,6 +60,14 @@ namespace CloudMedics.Data.Repositories
             if (userAccount == null)
                 return null;
             return await Update(updatedUser);
+        }
+
+        public async Task<bool> UserAccountExistAsync(string userId)
+        {
+            return (await FilterUsersAsync(u => u.UserId.ToString().Equals(userId, StringComparison.OrdinalIgnoreCase) ||
+                                    u.PhoneNumber.Equals(userId, StringComparison.OrdinalIgnoreCase) ||
+                                           u.EmailAddress.Equals(userId, StringComparison.OrdinalIgnoreCase)))
+                .FirstOrDefault() != null;
         }
     }
 }
