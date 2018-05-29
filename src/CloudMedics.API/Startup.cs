@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CloudMedics.Data;
+using CloudMedics.Data.Repositories;
+using CouldMedics.Services.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +28,17 @@ namespace CloudMedics.API
         public void ConfigureServices(IServiceCollection services)
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
-            services.AddMvc();
             services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
+
+            //register framework services
+            services.AddMvc();
+
+            //register dependent service : Emails, SMS, Infrastructure services
+
+            //register application services
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
