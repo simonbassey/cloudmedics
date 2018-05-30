@@ -6,6 +6,7 @@ using CloudMedics.Data;
 using CloudMedics.Data.Repositories;
 using CouldMedics.Services.Abstractions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,12 @@ namespace CloudMedics.API
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
             services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
-
+            services.AddCors((CorsOptions corsOptions) => corsOptions.AddPolicy(
+                                                        "AllowAll", corsPolicyBuilder =>
+                                                        corsPolicyBuilder.AllowAnyHeader()
+                                                        .AllowAnyMethod()
+                                                        .AllowAnyOrigin())
+                            );
             //register framework services
             services.AddMvc();
 
@@ -42,13 +48,14 @@ namespace CloudMedics.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAll");
             app.UseMvc();
         }
     }
