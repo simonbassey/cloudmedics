@@ -1,10 +1,11 @@
 ﻿using System;
 using CloudMedics.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudMedics.Data
 {
-    public class CloudMedicDbContext:DbContext
+    public class CloudMedicDbContext:IdentityDbContext<ApplicationUser>
     {
         public CloudMedicDbContext(){}
         public CloudMedicDbContext(DbContextOptions options) : base(options)
@@ -22,7 +23,6 @@ namespace CloudMedics.Data
 		}
 
 
-        public virtual DbSet<ApplicationUser> Users { get; set; }
         public virtual DbSet<Patient> Patients { get; set; }
         public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
