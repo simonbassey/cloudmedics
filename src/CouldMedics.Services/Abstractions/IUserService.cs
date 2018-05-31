@@ -7,9 +7,9 @@ namespace CouldMedics.Services.Abstractions
 {
     public interface  IUserService
     {
-        Task<AppUser> CreateUserAsync(AppUser user);
-        Task<AppUser> GetUserAsync(string userId);
-        Task<IEnumerable<AppUser>> GetUsersAsync();
-        Task<IEnumerable<AppUser>> FilterUsersAsync(Func<AppUser, bool> filterFn);
+        Task<ApplicationUser> CreateUserAsync(ApplicationUser user);
+        Task<ApplicationUser> GetUserAsync(string userId);
+        Task<IEnumerable<ApplicationUser>> GetUsersAsync();
+        Task<IEnumerable<ApplicationUser>> FilterUsersAsync(Func<ApplicationUser, bool> filterFn);
     }
 }

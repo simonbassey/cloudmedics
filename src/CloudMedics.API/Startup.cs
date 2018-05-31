@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace CloudMedics.API
 {
@@ -30,8 +29,9 @@ namespace CloudMedics.API
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
             services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
-            services.AddCors((CorsOptions corsOptions) => corsOptions.AddPolicy(
-                                                        "AllowAll", corsPolicyBuilder =>
+            services.AddCors((CorsOptions corsOptions) => 
+                                     corsOptions.AddPolicy(
+                                        "AllowAll", corsPolicyBuilder =>
                                                         corsPolicyBuilder.AllowAnyHeader()
                                                         .AllowAnyMethod()
                                                         .AllowAnyOrigin())

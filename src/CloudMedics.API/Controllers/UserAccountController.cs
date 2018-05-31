@@ -46,7 +46,7 @@ namespace CloudMedics.API.Controllers
         /// <returns>The account.</returns>
         /// <param name="user">User.</param>
         [HttpPost("create")]
-        public async Task<IActionResult> CreateAccount([FromBody] AppUser user)
+        public async Task<IActionResult> CreateAccount([FromBody] ApplicationUser user)
         {
             //Todo: Create a user model to control amount of information received by users
             try
@@ -66,7 +66,7 @@ namespace CloudMedics.API.Controllers
 
         #region privates
 
-        private void UpdateAnonymouseUserRegistrationData(ref AppUser newUserData) {
+        private void UpdateAnonymouseUserRegistrationData(ref ApplicationUser newUserData) {
             newUserData.AccountType = AccountType.Patient;
             newUserData.Created = DateTime.Now;
             newUserData.LastUpdate = DateTime.Now;

@@ -4,7 +4,7 @@ using CloudMedics.Domain.Enumerations;
 
 namespace CloudMedics.Domain.Models
 {
-    public class AppUser {
+    public class ApplicationUser {
 
         [Key]
         public Guid UserId { get; set; }

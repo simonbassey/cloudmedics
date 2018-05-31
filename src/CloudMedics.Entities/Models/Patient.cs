@@ -14,7 +14,7 @@ namespace CloudMedics.Domain.Models
         public PatientType PatientType { get; set; }
         public string Occupation { get; set; }
 
-        public virtual AppUser UserAccount { get; set; }
+        public virtual ApplicationUser UserAccount { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
     }
 }

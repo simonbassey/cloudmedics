@@ -11,7 +11,7 @@ namespace CloudMedics.Domain.Models
         public string UserId { get; set; }
         public string ProfileSummary { get; set; }
 
-        public AppUser UserAccount { get; set; }
+        public ApplicationUser UserAccount { get; set; }
         public ICollection<Appointment> Appointments {get;set;}
     }
 }

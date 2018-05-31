@@ -14,7 +14,7 @@ namespace CouldMedics.Services.Abstractions
             userRepository = _userRepository;
         }
 
-        public async Task<AppUser> CreateUserAsync(AppUser user)
+        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user)
         {
             try{
                 if (user == null)
@@ -31,17 +31,17 @@ namespace CouldMedics.Services.Abstractions
             }
         }
 
-        public async Task<IEnumerable<AppUser>> FilterUsersAsync(Func<AppUser, bool> filterFn)
+        public async Task<IEnumerable<ApplicationUser>> FilterUsersAsync(Func<ApplicationUser, bool> filterFn)
         {
             return await userRepository.FilterUsersAsync(filterFn);
         }
 
-        public async Task<AppUser> GetUserAsync(string userId)
+        public async Task<ApplicationUser> GetUserAsync(string userId)
         {
             return await userRepository.GetUserAsync(userId);
         }
 
-        public async Task<IEnumerable<AppUser>> GetUsersAsync()
+        public async Task<IEnumerable<ApplicationUser>> GetUsersAsync()
         {
             return await userRepository.GetUsersAsync();
         }
