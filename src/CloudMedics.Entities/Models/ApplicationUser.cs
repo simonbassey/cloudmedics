@@ -1,10 +1,17 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using CloudMedics.Domain.Enumerations;
+using Microsoft.AspNetCore.Identity;
 
 namespace CloudMedics.Domain.Models
 {
-    public class ApplicationUser {
+    public class ApplicationUser: IdentityUser {
+        public ApplicationUser()
+        {
+        }
+
+        public ApplicationUser(string username):base(username){
+        }
 
         [Key]
         public Guid UserId { get; set; }
@@ -12,10 +19,6 @@ namespace CloudMedics.Domain.Models
         public string FirstName  {get;set;}
         [Required]
         public string LastName { get; set; }
-        [Required]
-        public string EmailAddress { get; set; }
-        [Required]
-        public string PhoneNumber { get; set; }
         public AccountType AccountType { get; set; }
         public AccountStatus AccountStatus { get; set; }
         public char Gender { get; set; }
