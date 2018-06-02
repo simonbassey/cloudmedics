@@ -12,9 +12,10 @@ using System;
 namespace CloudMedics.Data.Migrations
 {
     [DbContext(typeof(CloudMedicDbContext))]
-    partial class CloudMedicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180602085932_migv2-Added-Identity")]
+    partial class migv2AddedIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

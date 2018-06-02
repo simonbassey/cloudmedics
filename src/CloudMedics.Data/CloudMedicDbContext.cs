@@ -19,7 +19,6 @@ namespace CloudMedics.Data
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-            optionsBuilder.UseMySql("Server = localhost; User =root; password=p@ssword001; Database=CloudMedicsDb");
 		}
 
 

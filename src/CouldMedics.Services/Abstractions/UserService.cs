@@ -20,9 +20,9 @@ namespace CouldMedics.Services.Abstractions
                 if (user == null)
                     throw new  ArgumentNullException($"{nameof(user)}", $"Invalid user model. Cannot ceate user with null details");
 
-                var userAccountExist = await userRepository.UserAccountExistAsync(user.EmailAddress);
+                var userAccountExist = await userRepository.UserAccountExistAsync(user.Email);
                 if (userAccountExist)
-                    throw new InvalidOperationException($"User account with email address {user.EmailAddress} already exist");
+                    throw new InvalidOperationException($"User account with email address {user.Email} already exist");
                 return await userRepository.CreateUserAsync(user);
                                                  
             }

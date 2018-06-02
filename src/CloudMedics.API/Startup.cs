@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using CloudMedics.Data;
 using CloudMedics.Data.Repositories;
+using CloudMedics.Domain.Models;
 using CouldMedics.Services.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,17 @@ namespace CloudMedics.API
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
             services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<CloudMedicDbContext>();
+            services.Configure<IdentityOptions>(
+                (IdentityOptions options) =>
+                {
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 6;
+
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedEmail = true;
+            });
             services.AddCors((CorsOptions corsOptions) => 
                                      corsOptions.AddPolicy(
                                         "AllowAll", corsPolicyBuilder =>

@@ -64,10 +64,13 @@ namespace CloudMedics.Data.Repositories
 
         public async Task<bool> UserAccountExistAsync(string userId)
         {
+            /*
             return (await FilterUsersAsync(u => u.UserId.ToString().Equals(userId, StringComparison.OrdinalIgnoreCase) ||
                                     u.PhoneNumber.Equals(userId, StringComparison.OrdinalIgnoreCase) ||
                                            u.EmailAddress.Equals(userId, StringComparison.OrdinalIgnoreCase)))
                 .FirstOrDefault() != null;
+            */
+            return await Task.FromResult(true);
         }
     }
 }
