@@ -75,11 +75,12 @@ namespace CloudMedics.API
             //register application services
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<AppDbInitializer>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, AppDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -90,6 +91,7 @@ namespace CloudMedics.API
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseMvc();
+            dbInitializer.Seed().Wait();
         }
     }
 }
