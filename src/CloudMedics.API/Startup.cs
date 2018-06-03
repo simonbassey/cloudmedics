@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CloudMedics.Data;
 using CloudMedics.Data.Repositories;
 using CloudMedics.Domain.Models;
 using CouldMedics.Services.Abstractions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CloudMedics.API
 {
@@ -42,6 +45,21 @@ namespace CloudMedics.API
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
             });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(jwtBearerOptions =>
+                    {
+                            jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidIssuer = Configuration["Token:Issuer"],
+                                ValidAudience = Configuration["Token:Audience"],
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:key"])),
+                                ValidateLifetime = true,
+                                ValidateAudience = true
+                            };
+                        jwtBearerOptions.Audience = Configuration["Token:Audience"];
+                        jwtBearerOptions.Authority = Configuration["Token:Issuer"];
+            
+                    });
             services.AddCors((CorsOptions corsOptions) => 
                                      corsOptions.AddPolicy(
                                         "AllowAll", corsPolicyBuilder =>
@@ -68,7 +86,9 @@ namespace CloudMedics.API
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseCors("AllowAll");
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
