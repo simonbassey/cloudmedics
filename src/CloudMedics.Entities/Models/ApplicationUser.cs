@@ -10,7 +10,7 @@ namespace CloudMedics.Domain.Models
         public ApplicationUser()
         {
 			Created = DateTime.Now;
-			LastUpdate = DateTime.Now();
+			LastUpdate = DateTime.Now;
         }
 
         public ApplicationUser(string username):base(username){
