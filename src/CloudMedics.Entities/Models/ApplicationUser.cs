@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Identity;
 namespace CloudMedics.Domain.Models
 {
     public class ApplicationUser: IdentityUser {
+		
         public ApplicationUser()
         {
+			Created = DateTime.Now;
+			LastUpdate = DateTime.Now();
         }
 
         public ApplicationUser(string username):base(username){
