@@ -31,14 +31,17 @@ namespace CloudMedics.Data
                     Email = "simon.dev.bassey@gmail.com",
                     PhoneNumber = "09077423735",
                     AccountType = AccountType.System,
-                    AccountStatus = AccountStatus.Active
+                    AccountStatus = AccountStatus.Active,
+                    UserName = "simon.dev.bassey@gmail.com",
+                    CreatedBy = "SYSTEM",
+                    EmailConfirmed = true
                 };
 
                 await InitApplicationRoles();
-                var superUserAccountExist = _userManager.FindByEmailAsync(superUserAccount.Email) !=null;
+                var superUserAccountExist = await _userManager.FindByEmailAsync(superUserAccount.Email) !=null;
                 if (superUserAccountExist)
                     return;
-               await CreateSuperUserAccount(superUserAccount);
+               await CreateSuperUserAccount(superUserAccount, "develop002");
                     
             }   
             catch(Exception exception) {
@@ -61,8 +64,8 @@ namespace CloudMedics.Data
             }
         }
 
-        private async Task CreateSuperUserAccount(ApplicationUser applicationUser){
-            var userCreateResult = await _userManager.CreateAsync(applicationUser);
+        private async Task CreateSuperUserAccount(ApplicationUser applicationUser, string password=""){
+            var userCreateResult = await _userManager.CreateAsync(applicationUser,password);
             if(userCreateResult.Succeeded) {
                 var superUserRoleName = Enum.GetName(typeof(RoleNames), RoleNames.SuperAdministrator);
                 var superUser = await _userManager.FindByEmailAsync(applicationUser.Email);
