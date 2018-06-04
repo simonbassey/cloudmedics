@@ -19,17 +19,17 @@ namespace CouldMedics.Services.Abstractions
     public class UserService : IUserService
     {
         private UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationUser> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
         private readonly IPasswordValidator<ApplicationUser> _passwordValidator;
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<UserService> _logger;
         public UserService(
                            UserManager<ApplicationUser> userManager,
-                           RoleManager<ApplicationUser> roleManager,
+            RoleManager<IdentityRole> roleManager,
                            IPasswordHasher<ApplicationUser> passwordHasher,
                            IPasswordValidator<ApplicationUser> passwordValidator,
-                           IConfigurationRoot appConfigSettings,
+            IConfiguration appConfigSettings,
                            ILogger<UserService> logger
                           )
         {
@@ -83,10 +83,14 @@ namespace CouldMedics.Services.Abstractions
             {
 
                 var userRoles = (await _userManager.GetRolesAsync(user));
-                var roleClaims = new Claim(ClaimTypes.Role, string.Join(",", userRoles));
-                var claims = await _roleManager.GetClaimsAsync(user);
-                claims.Add(roleClaims); 
-                claims.Union(new Claim[]{
+                var rolesAsClaims = new Claim(ClaimTypes.Role, string.Join(",", userRoles));
+
+                var roleClaims = new List<Claim>();
+                foreach(var role in userRoles) {
+                    roleClaims.AddRange((await _roleManager.GetClaimsAsync(new IdentityRole() { Name = role })));
+                }
+                roleClaims.Add(rolesAsClaims); 
+                roleClaims.Union(new Claim[]{
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Sid, user.UserId.ToString())
                 });
@@ -97,7 +101,7 @@ namespace CouldMedics.Services.Abstractions
                 var securityToken = new JwtSecurityToken(
                     issuer: _configuration["Token:Issuer"],
                     audience: _configuration["Token:Audience"],
-                    claims: claims,
+                    claims: roleClaims,
                     expires: DateTime.Now.AddMinutes(15),
                     signingCredentials: credentials
                 );
@@ -116,7 +120,7 @@ namespace CouldMedics.Services.Abstractions
 
         public async Task<bool> UserExist(string userIdentifier)
         {
-            var userExistQueryResult = _userManager.Users.FirstOrDefault(user => user.UserId.ToString().Equals(userIdentifier, StringComparison.OrdinalIgnoreCase) ||
+            var userExistQueryResult = _userManager.Users.FirstOrDefault(user => user.Id.Equals(userIdentifier, StringComparison.OrdinalIgnoreCase) ||
                                                      user.Email.Equals(userIdentifier, StringComparison.OrdinalIgnoreCase) ||
                                                      user.PhoneNumber.Equals(userIdentifier, StringComparison.OrdinalIgnoreCase)) != null;
             return await Task.FromResult(userExistQueryResult);
@@ -137,7 +141,7 @@ namespace CouldMedics.Services.Abstractions
                     return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(accountErrors[0]), null);
                 if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) == PasswordVerificationResult.Success) {
                     var jwtToken = await GenerateJWTSignInToken(user);
-                    return Tuple.Create(new IdentityResult(), jwtToken);
+                    return Tuple.Create(IdentityResult.Success, jwtToken);
                 }
                 return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(new IdentityError { Description = "invalid username or password" }), null);
             }
@@ -185,7 +189,7 @@ namespace CouldMedics.Services.Abstractions
             List<IdentityError> authenticationErrors = new List<IdentityError>();
             if (!user.EmailConfirmed)
                     authenticationErrors.Add(new IdentityError { Description = "You have not confirmed your email address" });
-                if (user.AccountStatus != AccountStatus.Active)
+            if (user.AccountStatus != AccountStatus.Active)
                     authenticationErrors.Add(new IdentityError { Description = "Your account is suspended. Contact admin to reolve issues " });
             return authenticationErrors;
         }
