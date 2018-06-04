@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CloudMedics.Domain.Enumerations;
 using CloudMedics.Domain.Models;
 using CouldMedics.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloudMedics.API.Controllers
 {
     [Route("api/users/account")]
+    [Authorize]
     public class UserAccountController : Controller
     {
         private readonly IUserService userService;
