@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,8 +35,12 @@ namespace CloudMedics.API
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
             services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
+
+
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<CloudMedicDbContext>();
+                   .AddEntityFrameworkStores<CloudMedicDbContext>()
+                   .AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(
                 (IdentityOptions options) =>
                 {
@@ -47,34 +52,51 @@ namespace CloudMedics.API
 
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
-            });
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(jwtBearerOptions =>
+                });
+            services.AddAuthentication(option =>
+            {
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).
+            AddJwtBearer(jwtBearerOptions =>
+                {
+
+                    jwtBearerOptions.RequireHttpsMetadata = false;
+                    jwtBearerOptions.SaveToken = true;
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
                     {
-                            jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                            {
-                                ValidIssuer = Configuration["Token:Issuer"],
-                                ValidAudience = Configuration["Token:Audience"],
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:key"])),
-                                ValidateLifetime = true,
-                                ValidateAudience = true
-                            };
-                        jwtBearerOptions.Audience = Configuration["Token:Audience"];
-                        jwtBearerOptions.Authority = Configuration["Token:Issuer"];
-            
-                    });
-            services.AddCors((CorsOptions corsOptions) => 
-                                     corsOptions.AddPolicy(
-                                        "AllowAll", corsPolicyBuilder =>
-                                                        corsPolicyBuilder.AllowAnyHeader()
-                                                        .AllowAnyMethod()
-                                                        .AllowAnyOrigin())
-                            );
+                        ValidIssuer = Configuration["Token:Issuer"],
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Token:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:Key"])),
+                        RequireSignedTokens = true,
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true
+                    };
+                    jwtBearerOptions.Events = new JwtBearerEvents()
+                    {
+                        OnTokenValidated = (ctx) =>
+                        {
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = (ctx) =>
+                        {
+                            ctx.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return Task.CompletedTask;
+                        }
+                    };
+
+
+                });
+
+            services.AddCors((CorsOptions corsOptions) => corsOptions.AddPolicy("AllowAll", corsPolicyBuilder =>
+                                                       corsPolicyBuilder.AllowAnyHeader()
+                                                       .AllowAnyMethod()
+                                                       .AllowAnyOrigin())
+                           );
             //register framework services
             services.AddMvc();
-
-            //register dependent service : Emails, SMS, Infrastructure services
-
             //register application services
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserService, UserService>();
@@ -88,6 +110,7 @@ namespace CloudMedics.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
 
 
