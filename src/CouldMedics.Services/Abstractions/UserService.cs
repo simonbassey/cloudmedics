@@ -82,29 +82,10 @@ namespace CouldMedics.Services.Abstractions
             try
             {
 
-                var userRoles = (await _userManager.GetRolesAsync(user));
-                var rolesAsClaims = new Claim(ClaimTypes.Role, string.Join(",", userRoles));
-
-                var roleClaims = new List<Claim>();
-                foreach(var role in userRoles) {
-                    roleClaims.AddRange((await _roleManager.GetClaimsAsync(new IdentityRole() { Name = role })));
-                }
-                roleClaims.Add(rolesAsClaims); 
-                roleClaims.Union(new Claim[]{
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Sid, user.UserId.ToString())
-                });
-
+                var userClaims = await BuildUserClaims(user);
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
                 var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var securityToken = new JwtSecurityToken(
-                    issuer: _configuration["Token:Issuer"],
-                    audience: _configuration["Token:Audience"],
-                    claims: roleClaims,
-                    expires: DateTime.Now.AddMinutes(15),
-                    signingCredentials: credentials
-                );
+                var securityToken = BuildAuthToken(credentials, userClaims);
 
                 return new
                 {
@@ -117,6 +98,7 @@ namespace CouldMedics.Services.Abstractions
                 throw;
             }
         }
+
 
         public async Task<bool> UserExist(string userIdentifier)
         {
@@ -150,6 +132,9 @@ namespace CouldMedics.Services.Abstractions
                 throw;
             }
         }
+
+
+
         #region privates
         private async Task<Tuple<IdentityResult, ApplicationUser>> AddUserAccountAsync(ApplicationUser user, string password= "") {
             try
@@ -194,6 +179,40 @@ namespace CouldMedics.Services.Abstractions
             return authenticationErrors;
         }
 
+
+
+        private async Task<IList<Claim>> BuildUserClaims(ApplicationUser user)
+        {
+            var assignedRoles = (await _userManager.GetRolesAsync(user));
+            var rolesAsClaims = new Claim("roles", string.Join(",", assignedRoles));
+
+            var roleClaims = new List<Claim>();
+            foreach (var role in assignedRoles)
+            {
+                roleClaims.AddRange((await _roleManager.GetClaimsAsync(new IdentityRole() { Name = role })));
+            }
+            roleClaims.Add(rolesAsClaims);
+            roleClaims.Union(new Claim[]{
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Sid, user.UserId.ToString())
+                });
+
+            return roleClaims;
+
+        }
+
+        private JwtSecurityToken BuildAuthToken(SigningCredentials credentials, IList<Claim> userClaims, int tokenExpiryInMinutes = 15)
+        {
+            return
+                new JwtSecurityToken(
+                    issuer: _configuration["Token:Issuer"],
+                    audience: _configuration["Token:Audience"],
+                    claims: userClaims,
+                    expires: DateTime.Now.AddMinutes(tokenExpiryInMinutes),
+                    signingCredentials: credentials
+                );
+
+        }
         #endregion
 
 
