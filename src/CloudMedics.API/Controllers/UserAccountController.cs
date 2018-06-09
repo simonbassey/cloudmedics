@@ -48,6 +48,7 @@ namespace CloudMedics.API.Controllers
         /// <returns>The account.</returns>
         /// <param name="user">User.</param>
         [HttpPost("create")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAccount([FromBody] ApplicationUser user)
         {
             //Todo: Create a user model to control amount of information received by users
@@ -55,7 +56,7 @@ namespace CloudMedics.API.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                UpdateAnonymouseUserRegistrationData(ref user);
+                UpdateAnonymousUserRegistrationData(ref user);
                 var newAccount = await userService.CreateUserAsync(user);
                 return newAccount != null ? Ok(newAccount) : StatusCode((int)HttpStatusCode.Conflict, "Failed to create user account");
 
@@ -68,7 +69,7 @@ namespace CloudMedics.API.Controllers
 
         #region privates
 
-        private void UpdateAnonymouseUserRegistrationData(ref ApplicationUser newUserData) {
+        private void UpdateAnonymousUserRegistrationData(ref ApplicationUser newUserData) {
             newUserData.AccountType = AccountType.Patient;
             newUserData.Created = DateTime.Now;
             newUserData.LastUpdate = DateTime.Now;
