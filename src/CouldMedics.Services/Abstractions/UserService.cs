@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using CloudMedics.Data.Repositories;
 using CloudMedics.Domain.Enumerations;
 using CloudMedics.Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -112,22 +111,25 @@ namespace CouldMedics.Services.Abstractions
 
         public async Task<Tuple<IdentityResult, object>> SignInUserAsync(string userName, string password)
         {
-            try{
+            try
+            {
 
                 var user = (await FilterUsersAsync(u => u.Email.Equals(userName, StringComparison.OrdinalIgnoreCase) ||
                                                    u.PhoneNumber.Equals(userName, StringComparison.OrdinalIgnoreCase))).FirstOrDefault();
                 if (user == null)
-                    return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(new IdentityError { Description="username is invalid"}), null);
+                    return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(new IdentityError { Description = "username is invalid" }), null);
                 var accountErrors = ValidateAccountStatus(user);
                 if (accountErrors.Count > 0)
                     return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(accountErrors[0]), null);
-                if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) == PasswordVerificationResult.Success) {
+                if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) == PasswordVerificationResult.Success)
+                {
                     var jwtToken = await GenerateJWTSignInToken(user);
                     return Tuple.Create(IdentityResult.Success, jwtToken);
                 }
                 return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(new IdentityError { Description = "invalid username or password" }), null);
             }
-            catch(Exception exception) {
+            catch (Exception exception)
+            {
                 _logger.LogError("Error occured while validating signing credentials  for user {0} -> {1}", userName, exception);
                 throw;
             }
@@ -136,7 +138,8 @@ namespace CouldMedics.Services.Abstractions
 
 
         #region privates
-        private async Task<Tuple<IdentityResult, ApplicationUser>> AddUserAccountAsync(ApplicationUser user, string password= "") {
+        private async Task<Tuple<IdentityResult, ApplicationUser>> AddUserAccountAsync(ApplicationUser user, string password = "")
+        {
             try
             {
                 var userCreateResult = await _userManager.CreateAsync(user, password);
@@ -148,12 +151,14 @@ namespace CouldMedics.Services.Abstractions
 
                 //user created. next we send confirmation email
             }
-            catch(Exception) {
-                throw;   
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        private async Task AddUserToRole(ApplicationUser user) {
+        private async Task AddUserToRole(ApplicationUser user)
+        {
             var accountRole = MapRoleFromAccountType(user.AccountType);
             if (string.IsNullOrEmpty(accountRole))
                 return;
@@ -161,7 +166,8 @@ namespace CouldMedics.Services.Abstractions
         }
 
 
-        private string MapRoleFromAccountType(AccountType accountType) {
+        private string MapRoleFromAccountType(AccountType accountType)
+        {
             var role = accountType == AccountType.Administrator ? Enum.GetName(typeof(RoleNames), RoleNames.Administrator) :
                            accountType == AccountType.Doctor ? Enum.GetName(typeof(RoleNames), RoleNames.Doctor) :
                                                  accountType == AccountType.Staff ? Enum.GetName(typeof(RoleNames), RoleNames.Staff) :
@@ -170,12 +176,13 @@ namespace CouldMedics.Services.Abstractions
             return role;
         }
 
-        private IList<IdentityError> ValidateAccountStatus(ApplicationUser user) {
+        private IList<IdentityError> ValidateAccountStatus(ApplicationUser user)
+        {
             List<IdentityError> authenticationErrors = new List<IdentityError>();
             if (!user.EmailConfirmed)
-                    authenticationErrors.Add(new IdentityError { Description = "You have not confirmed your email address" });
+                authenticationErrors.Add(new IdentityError { Description = "You have not confirmed your email address" });
             if (user.AccountStatus != AccountStatus.Active)
-                    authenticationErrors.Add(new IdentityError { Description = "Your account is suspended. Contact admin to reolve issues " });
+                authenticationErrors.Add(new IdentityError { Description = "Your account is suspended. Contact admin to reolve issues " });
             return authenticationErrors;
         }
 
