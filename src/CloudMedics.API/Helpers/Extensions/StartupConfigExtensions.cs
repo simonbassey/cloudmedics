@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace CloudMedics.API.Configurations
+namespace CloudMedics.API.Helpers.Extensions
 {
     public static class StartupConfigExtensions
     {

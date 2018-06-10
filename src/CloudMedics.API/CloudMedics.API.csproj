@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
