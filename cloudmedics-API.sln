@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouldMedics.Services", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.API", "src\CloudMedics.API\CloudMedics.API.csproj", "{6AAA8951-CDEC-4A11-B517-1C6ABAAFA799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.API.Test", "test\CloudMedics.API.Test\CloudMedics.API.Test.csproj", "{F39DD522-096A-4A34-992E-1B2B7F6208A0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Data", "src\data\CloudMedics.Data\CloudMedics.Data.csproj", "{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{91B1CA94-FFAB-43EC-9714-B4E740BEC25D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.API.Test", "test\CloudMedics.API.Test\CloudMedics.API.Test.csproj", "{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,15 +31,16 @@ Global
 		{6AAA8951-CDEC-4A11-B517-1C6ABAAFA799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AAA8951-CDEC-4A11-B517-1C6ABAAFA799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AAA8951-CDEC-4A11-B517-1C6ABAAFA799}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F39DD522-096A-4A34-992E-1B2B7F6208A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F39DD522-096A-4A34-992E-1B2B7F6208A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F39DD522-096A-4A34-992E-1B2B7F6208A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F39DD522-096A-4A34-992E-1B2B7F6208A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18} = {91B1CA94-FFAB-43EC-9714-B4E740BEC25D}
 	EndGlobalSection
 EndGlobal
