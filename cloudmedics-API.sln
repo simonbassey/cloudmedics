@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{91B1CA94-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.API.Test", "test\CloudMedics.API.Test\CloudMedics.API.Test.csproj", "{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{2C8FC276-D793-4ECA-AD39-5D5DC8C9DD68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedics.Data.Mock", "src\data\CloudMedics.Data.Mock\CloudMedics.Data.Mock.csproj", "{01E3840F-5ECA-4C96-8472-D9188679C06C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +43,14 @@ Global
 		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01E3840F-5ECA-4C96-8472-D9188679C06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01E3840F-5ECA-4C96-8472-D9188679C06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01E3840F-5ECA-4C96-8472-D9188679C06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01E3840F-5ECA-4C96-8472-D9188679C06C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A7DAF7C0-255E-48E1-BE69-B5BE3A1D4A18} = {91B1CA94-FFAB-43EC-9714-B4E740BEC25D}
+		{D0D8F370-B45F-4EAD-BE56-F03AA9F22BA9} = {2C8FC276-D793-4ECA-AD39-5D5DC8C9DD68}
+		{01E3840F-5ECA-4C96-8472-D9188679C06C} = {2C8FC276-D793-4ECA-AD39-5D5DC8C9DD68}
 	EndGlobalSection
 EndGlobal

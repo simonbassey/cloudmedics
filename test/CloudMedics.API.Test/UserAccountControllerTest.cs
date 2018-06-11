@@ -3,7 +3,7 @@ using Xunit;
 
 namespace CloudMedics.API.Test
 {
-    public class UnitTest1
+    public class UserAccountControllerTest
     {
         [Fact]
         public void Test1()
