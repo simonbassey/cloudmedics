@@ -12,7 +12,7 @@ namespace CloudMedics.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AppDbInitializer> _logger;
-        public AppDbInitializer(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, 
+        public AppDbInitializer(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
                                 ILogger<AppDbInitializer> logger)
         {
             _userManager = userManager;
@@ -21,8 +21,10 @@ namespace CloudMedics.Data
         }
 
 
-        public async Task Seed() {
-            try{
+        public async Task Seed()
+        {
+            try
+            {
 
                 var superUserAccount = new ApplicationUser
                 {
@@ -38,38 +40,45 @@ namespace CloudMedics.Data
                 };
 
                 await InitApplicationRoles();
-                var superUserAccountExist = await _userManager.FindByEmailAsync(superUserAccount.Email) !=null;
+                var superUserAccountExist = await _userManager.FindByEmailAsync(superUserAccount.Email) != null;
                 if (superUserAccountExist)
                     return;
-               await CreateSuperUserAccount(superUserAccount, "develop002");
-                    
-            }   
-            catch(Exception exception) {
+                await CreateSuperUserAccount(superUserAccount, "develop002");
+
+            }
+            catch (Exception exception)
+            {
                 _logger.LogError("Error occured while trying to seed data during Database Initialization -> {0}", exception);
             }
         }
 
         private async Task InitApplicationRoles()
-        { 
-            try{
-                foreach(var role in Enum.GetValues(typeof(RoleNames))) {
+        {
+            try
+            {
+                foreach (var role in Enum.GetValues(typeof(RoleNames)))
+                {
                     if (!(await _roleManager.RoleExistsAsync(role.ToString())))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole() { Name = role.ToString()});
+                        await _roleManager.CreateAsync(new IdentityRole() { Name = role.ToString() });
                     }
-                }   
+                }
             }
-            catch(Exception exception) {
+            catch (Exception exception)
+            {
                 _logger.LogError("Error occured while initializing application roles -> {0}", exception);
             }
         }
 
-        private async Task CreateSuperUserAccount(ApplicationUser applicationUser, string password=""){
-            var userCreateResult = await _userManager.CreateAsync(applicationUser,password);
-            if(userCreateResult.Succeeded) {
+        private async Task CreateSuperUserAccount(ApplicationUser applicationUser, string password = "")
+        {
+            var userCreateResult = await _userManager.CreateAsync(applicationUser, password);
+            if (userCreateResult.Succeeded)
+            {
                 var superUserRoleName = Enum.GetName(typeof(RoleNames), RoleNames.SuperAdministrator);
                 var superUser = await _userManager.FindByEmailAsync(applicationUser.Email);
-                if(! (await _userManager.IsInRoleAsync(superUser, superUserRoleName))) {
+                if (!(await _userManager.IsInRoleAsync(superUser, superUserRoleName)))
+                {
                     await _userManager.AddToRoleAsync(superUser, superUserRoleName);
                 }
             }
