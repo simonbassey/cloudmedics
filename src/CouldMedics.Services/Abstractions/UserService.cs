@@ -20,22 +20,19 @@ namespace CouldMedics.Services.Abstractions
         private UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
-        private readonly IPasswordValidator<ApplicationUser> _passwordValidator;
         private readonly IConfiguration _configuration;
         private readonly ILogger<UserService> _logger;
         public UserService(
                            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+                           RoleManager<IdentityRole> roleManager,
                            IPasswordHasher<ApplicationUser> passwordHasher,
-                           IPasswordValidator<ApplicationUser> passwordValidator,
-            IConfiguration appConfigSettings,
+                           IConfiguration appConfigSettings,
                            ILogger<UserService> logger
                           )
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _passwordHasher = passwordHasher;
-            _passwordValidator = passwordValidator;
             _configuration = appConfigSettings;
             _logger = logger;
         }
