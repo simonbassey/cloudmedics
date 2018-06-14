@@ -1,3 +1,29 @@
-﻿{
-
-}
+﻿[
+    {
+        "userId": "00000000-0000-0000-0000-000000000000",
+        "firstName": "Super",
+        "lastName": "User",
+        "accountType": 0,
+        "accountStatus": 1,
+        "gender": "\u0000",
+        "dateOfBirth": null,
+        "created": "2018-06-03T14:49:08.297044",
+        "lastUpdate": "2018-06-03T14:49:08.34346",
+        "createdBy": "SYSTEM",
+        "id": "faca3b32-6102-4257-99d4-d27148adc6d9",
+        "userName": "simon.dev.bassey@gmail.com",
+        "normalizedUserName": "SIMON.DEV.BASSEY@GMAIL.COM",
+        "email": "simon.dev.bassey@gmail.com",
+        "normalizedEmail": "SIMON.DEV.BASSEY@GMAIL.COM",
+        "emailConfirmed": true,
+        "passwordHash": "AQAAAAEAACcQAAAAELQWgjbPIA4b7kwR6gDTbyIC0tbemb7jaStrnsgihkRpgw9UfqyTQsSN3adcTqMiIw==",
+        "securityStamp": "44c13822-05b5-4d2a-a741-a03e0d193a74",
+        "concurrencyStamp": "033672a5-6d58-46f2-8869-b807f8aa212c",
+        "phoneNumber": "09077423735",
+        "phoneNumberConfirmed": false,
+        "twoFactorEnabled": false,
+        "lockoutEnd": null,
+        "lockoutEnabled": true,
+        "accessFailedCount": 0
+    }
+]
