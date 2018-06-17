@@ -8,25 +8,6 @@ namespace CloudMedics.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Doctors_AspNetUsers_UserAccountId",
-                table: "Doctors");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Patients_AspNetUsers_UserAccountId",
-                table: "Patients");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Patients_UserAccountId",
-                table: "Patients");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Doctors_UserAccountId",
-                table: "Doctors");
-
-            migrationBuilder.DropUniqueConstraint(
-                name: "AK_AspNetUsers_UserId",
-                table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
                 name: "UserAccountId",

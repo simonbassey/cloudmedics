@@ -77,14 +77,10 @@ namespace CloudMedics.Data.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<Guid>("UserId");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("UserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -126,13 +122,12 @@ namespace CloudMedics.Data.Migrations
 
                     b.Property<string>("ProfileSummary");
 
-                    b.Property<string>("UserAccountId");
-
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("DoctorId");
 
-                    b.HasIndex("UserAccountId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Doctors");
                 });
@@ -148,13 +143,12 @@ namespace CloudMedics.Data.Migrations
 
                     b.Property<int>("PatientType");
 
-                    b.Property<string>("UserAccountId");
-
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("PatientId");
 
-                    b.HasIndex("UserAccountId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -283,14 +277,16 @@ namespace CloudMedics.Data.Migrations
                 {
                     b.HasOne("CloudMedics.Domain.Models.ApplicationUser", "UserAccount")
                         .WithMany()
-                        .HasForeignKey("UserAccountId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CloudMedics.Domain.Models.Patient", b =>
                 {
                     b.HasOne("CloudMedics.Domain.Models.ApplicationUser", "UserAccount")
                         .WithMany()
-                        .HasForeignKey("UserAccountId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

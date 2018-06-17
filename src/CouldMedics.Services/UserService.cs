@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using CloudMedics.Data.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CouldMedics.Services.Abstractions
 {
@@ -22,12 +24,14 @@ namespace CouldMedics.Services.Abstractions
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
         private readonly IConfiguration _configuration;
         private readonly ILogger<UserService> _logger;
+        private readonly IPatientUserRepository _patientUserRepository;
         public UserService(
                            UserManager<ApplicationUser> userManager,
                            RoleManager<IdentityRole> roleManager,
                            IPasswordHasher<ApplicationUser> passwordHasher,
                            IConfiguration appConfigSettings,
-                           ILogger<UserService> logger
+                           ILogger<UserService> logger,
+                           IPatientUserRepository patientUserRepository
                           )
         {
             _userManager = userManager;
@@ -35,20 +39,17 @@ namespace CouldMedics.Services.Abstractions
             _passwordHasher = passwordHasher;
             _configuration = appConfigSettings;
             _logger = logger;
+            _patientUserRepository = patientUserRepository;
         }
 
-        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password = "")
+        public async Task<Tuple<IdentityResult, ApplicationUser>> CreateUserAsync(ApplicationUser user, string password = "")
         {
             try
             {
-                if (user == null)
-                    throw new ArgumentNullException($"{nameof(user)}", $"Invalid user model. Cannot ceate user with null details");
-
-                var userAccountExist = await this.UserExist(user.Email);
-                if (userAccountExist)
-                    throw new InvalidOperationException($"User account with email address {user.Email} already exist");
-                var userCreateResult = await AddUserAccountAsync(user, password);
-                return userCreateResult.Item2;
+                var validationResult = await ValidateAccountCreateRequest(user);
+                if (!validationResult.Succeeded)
+                    return Tuple.Create<IdentityResult, ApplicationUser>(validationResult, null);
+                return await AddUserAccountAsync(user, password);
 
             }
             catch (Exception exception)
@@ -60,7 +61,18 @@ namespace CouldMedics.Services.Abstractions
 
         public async Task<IEnumerable<ApplicationUser>> FilterUsersAsync(Func<ApplicationUser, bool> filterFn)
         {
-            return await Task.FromResult(_userManager.Users.Where(filterFn).ToList());
+            try
+            {
+                var allUsers = await _userManager.Users.ToListAsync();
+                var users = allUsers.Where<ApplicationUser>(filterFn).ToList();
+                return users;
+            }
+            catch (Exception exception)
+            {
+                var exce = exception;
+                throw;
+            }
+
         }
 
         public async Task<ApplicationUser> GetUserAsync(string userId)
@@ -110,9 +122,7 @@ namespace CouldMedics.Services.Abstractions
         {
             try
             {
-
-                var user = (await FilterUsersAsync(u => u.Email.Equals(userName, StringComparison.OrdinalIgnoreCase) ||
-                                                   u.PhoneNumber.Equals(userName, StringComparison.OrdinalIgnoreCase))).FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(userName);
                 if (user == null)
                     return Tuple.Create<IdentityResult, object>(IdentityResult.Failed(new IdentityError { Description = "username is invalid" }), null);
                 var accountErrors = ValidateAccountStatus(user);
@@ -186,6 +196,16 @@ namespace CouldMedics.Services.Abstractions
             return authenticationErrors;
         }
 
+        private async Task<IdentityResult> ValidateAccountCreateRequest(ApplicationUser user)
+        {
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid user model.Cannot ceate user with null details" });
+            var userAccountExist = await UserExist(user.Email);
+            if (userAccountExist)
+                return IdentityResult.Failed(new IdentityError { Description = $"User account with email address {user.Email} already exist" });
+            return IdentityResult.Success;
+        }
+
         private async Task<IList<Claim>> BuildUserClaims(ApplicationUser user)
         {
             var assignedRoles = (await _userManager.GetRolesAsync(user));
@@ -225,10 +245,17 @@ namespace CouldMedics.Services.Abstractions
             {
                 case AccountType.Patient:
                     {
-
+                        var newPatient = new Patient { UserId = user.Id };
+                        var patientAccountCreated = await _patientUserRepository.AddPatientAsync(newPatient) != null;
+                        return patientAccountCreated;
                     };
+                default:
+                    {
+                        return false;
+                    }
             }
         }
+
         #endregion
 
 

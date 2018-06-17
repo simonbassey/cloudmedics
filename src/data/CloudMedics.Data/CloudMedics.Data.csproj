@@ -24,4 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\CloudMedics.Entities\CloudMedics.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Migration-scripts\Migv2-0-1-ModfAppUser" />
+    <None Remove="Migration-scripts\Migv2-01-ModfAppUser" />
+    <None Remove="Migration-scripts\Migv2-01-ModfAppUser" />
+    <None Remove="Migration-scripts\Migv2-0-1-ModfAppUser" />
+  </ItemGroup>
 </Project>
