@@ -18,9 +18,9 @@ namespace CloudMedics.API.Controllers
     [Authorize]
     public class UserAccountController : Controller
     {
-        private readonly IUserService userService;
+        private readonly IAccountService userService;
         private readonly IMapper _mapper;
-        public UserAccountController(IUserService userService_, IMapper mapper)
+        public UserAccountController(IAccountService userService_, IMapper mapper)
         {
             userService = userService_;
             _mapper = mapper;

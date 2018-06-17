@@ -13,8 +13,8 @@ namespace CloudMedics.API.Controllers
     public class PatientUsersController : Controller
     {
         private readonly IPatientUserService _patientUserService;
-        private readonly IUserService _accountService;
-        public PatientUsersController(IPatientUserService patientService, IUserService accountService)
+        private readonly IAccountService _accountService;
+        public PatientUsersController(IPatientUserService patientService, IAccountService accountService)
         {
             _patientUserService = patientService;
             _accountService = accountService;

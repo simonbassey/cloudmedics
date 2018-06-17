@@ -17,20 +17,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CouldMedics.Services.Abstractions
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         private UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<UserService> _logger;
+        private readonly ILogger<AccountService> _logger;
         private readonly IPatientUserRepository _patientUserRepository;
-        public UserService(
+        public AccountService(
                            UserManager<ApplicationUser> userManager,
                            RoleManager<IdentityRole> roleManager,
                            IPasswordHasher<ApplicationUser> passwordHasher,
                            IConfiguration appConfigSettings,
-                           ILogger<UserService> logger,
+                           ILogger<AccountService> logger,
                            IPatientUserRepository patientUserRepository
                           )
         {

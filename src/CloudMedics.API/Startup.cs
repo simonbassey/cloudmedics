@@ -48,7 +48,7 @@ namespace CloudMedics.API
             //register application services
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPatientUserRepository, PatientUserRepository>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IPatientUserService, PatientUserService>();
             services.AddTransient<AppDbInitializer>();
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CouldMedics.Services.Abstractions
 {
-    public interface IUserService
+    public interface IAccountService
     {
         Task<Tuple<IdentityResult, ApplicationUser>> CreateUserAsync(ApplicationUser user, string password = "");
         Task<ApplicationUser> GetUserAsync(string userId);

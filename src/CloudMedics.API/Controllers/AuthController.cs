@@ -16,9 +16,9 @@ namespace CloudMedics.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IAccountService _userService;
         private ILogger<AuthController> _logger;
-        public AuthController(IUserService userService, ILogger<AuthController> logger) {
+        public AuthController(IAccountService userService, ILogger<AuthController> logger) {
             _userService = userService;
             _logger = logger;
         }
