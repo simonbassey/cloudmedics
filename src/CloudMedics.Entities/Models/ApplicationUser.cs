@@ -5,21 +5,20 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CloudMedics.Domain.Models
 {
-    public class ApplicationUser: IdentityUser {
-		
+    public class ApplicationUser : IdentityUser
+    {
+
         public ApplicationUser()
         {
-			Created = DateTime.Now;
-			LastUpdate = DateTime.Now;
+            Created = DateTime.Now;
+            LastUpdate = DateTime.Now;
         }
 
-        public ApplicationUser(string username):base(username){
+        public ApplicationUser(string username) : base(username)
+        {
         }
-
-        [Key]
-        public Guid UserId { get; set; }
         [Required]
-        public string FirstName  {get;set;}
+        public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
         public AccountType AccountType { get; set; }

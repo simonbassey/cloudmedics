@@ -37,7 +37,7 @@ namespace CouldMedics.Services.Abstractions
             _logger = logger;
         }
 
-        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user)
+        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password = "")
         {
             try
             {
@@ -47,7 +47,7 @@ namespace CouldMedics.Services.Abstractions
                 var userAccountExist = await this.UserExist(user.Email);
                 if (userAccountExist)
                     throw new InvalidOperationException($"User account with email address {user.Email} already exist");
-                var userCreateResult = await AddUserAccountAsync(user);
+                var userCreateResult = await AddUserAccountAsync(user, password);
                 return userCreateResult.Item2;
 
             }
@@ -139,11 +139,14 @@ namespace CouldMedics.Services.Abstractions
         {
             try
             {
-                var userCreateResult = await _userManager.CreateAsync(user, password);
+
+                var userCreateResult = await (string.IsNullOrEmpty(password) ? _userManager.CreateAsync(user) :
+                                              _userManager.CreateAsync(user, password));
                 if (!userCreateResult.Succeeded)
                     return Tuple.Create<IdentityResult, ApplicationUser>(userCreateResult, null);
                 var createdUser = await _userManager.FindByEmailAsync(user.Email);
                 await AddUserToRole(createdUser);
+                await SetUpRelatedAccount(user);
                 return Tuple.Create(userCreateResult, createdUser);
 
                 //user created. next we send confirmation email
@@ -183,8 +186,6 @@ namespace CouldMedics.Services.Abstractions
             return authenticationErrors;
         }
 
-
-
         private async Task<IList<Claim>> BuildUserClaims(ApplicationUser user)
         {
             var assignedRoles = (await _userManager.GetRolesAsync(user));
@@ -198,7 +199,7 @@ namespace CouldMedics.Services.Abstractions
             roleClaims.Add(rolesAsClaims);
             roleClaims.Union(new Claim[]{
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Sid, user.UserId.ToString())
+                new Claim(JwtRegisteredClaimNames.Sid, user.Id)
                 });
 
             return roleClaims;
@@ -216,6 +217,17 @@ namespace CouldMedics.Services.Abstractions
                     signingCredentials: credentials
                 );
 
+        }
+
+        private async Task<bool> SetUpRelatedAccount(ApplicationUser user)
+        {
+            switch (user.AccountType)
+            {
+                case AccountType.Patient:
+                    {
+
+                    };
+            }
         }
         #endregion
 
