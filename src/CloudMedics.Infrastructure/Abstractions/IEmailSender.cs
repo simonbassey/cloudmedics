@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
+using CloudMedics.Infrastructure.Models;
 
 namespace CloudMedics.Infrastructure
 {
-    public class Class1
+    public interface IEmailSender
     {
+        Task<bool> SendEmailAsync(EmailMessage message);
     }
 }
