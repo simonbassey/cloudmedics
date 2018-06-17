@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using CouldMedics.Services;
 
 namespace CloudMedics.API
 {
@@ -26,8 +28,9 @@ namespace CloudMedics.API
         public void ConfigureServices(IServiceCollection services)
         {
             var connectString = Configuration.GetConnectionString("cloudmedicsDbConnection");
-            services.AddDbContext<CloudMedicDbContext>(options => options.UseMySql(connectString));
+            services.AddDbContext<CloudMedicDbContext>();
 
+            services.AddAutoMapper();
             services.AddIdentity<ApplicationUser, IdentityRole>()
                    .AddEntityFrameworkStores<CloudMedicDbContext>()
                    .AddDefaultTokenProviders();
@@ -44,7 +47,9 @@ namespace CloudMedics.API
             services.AddMvc();
             //register application services
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IPatientUserRepository, PatientUserRepository>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPatientUserService, PatientUserService>();
             services.AddTransient<AppDbInitializer>();
 
         }
