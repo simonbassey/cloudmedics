@@ -9,7 +9,8 @@ using CouldMedics.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using CloudMedics.Domain.ViewModels;
+using AutoMapper;
 
 namespace CloudMedics.API.Controllers
 {
@@ -18,9 +19,11 @@ namespace CloudMedics.API.Controllers
     public class UserAccountController : Controller
     {
         private readonly IUserService userService;
-        public UserAccountController(IUserService userService_)
+        private readonly IMapper _mapper;
+        public UserAccountController(IUserService userService_, IMapper mapper)
         {
             userService = userService_;
+            _mapper = mapper;
         }
 
 
@@ -49,16 +52,17 @@ namespace CloudMedics.API.Controllers
         /// <param name="user">User.</param>
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateAccount([FromBody] ApplicationUser user)
+        public async Task<IActionResult> CreateAccount([FromBody] SignUpModel accountVm)
         {
-            //Todo: Create a user model to control amount of information received by users
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
-                UpdateAnonymousUserRegistrationData(ref user);
-                var newAccount = await userService.CreateUserAsync(user);
-                return newAccount != null ? Ok(newAccount) : StatusCode((int)HttpStatusCode.Conflict, "Failed to create user account");
+                var accountCreateResult = await userService.CreateUserAsync(_mapper.Map<ApplicationUser>(accountVm));
+                if (!accountCreateResult.Item1.Succeeded)
+                    return BadRequest(accountCreateResult.Item1.Errors);
+                return accountCreateResult.Item2 == null ? StatusCode((int)HttpStatusCode.Conflict, "Failed to create user account")
+                                              : Ok(accountCreateResult.Item2);
 
             }
             catch (Exception exception)
@@ -69,7 +73,8 @@ namespace CloudMedics.API.Controllers
 
         #region privates
 
-        private void UpdateAnonymousUserRegistrationData(ref ApplicationUser newUserData) {
+        private void UpdateAnonymousUserRegistrationData(ref ApplicationUser newUserData)
+        {
             newUserData.AccountType = AccountType.Patient;
             newUserData.Created = DateTime.Now;
             newUserData.LastUpdate = DateTime.Now;
