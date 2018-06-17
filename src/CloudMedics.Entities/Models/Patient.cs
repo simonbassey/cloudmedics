@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CloudMedics.Domain.Enumerations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CloudMedics.Domain.Models
 {
@@ -9,7 +11,9 @@ namespace CloudMedics.Domain.Models
     {
         [Key]
         public int PatientId { get; set; }
-        public int UserId { get; set; }
+        [ForeignKey("UserAccount")]
+        [Required]
+        public string UserId { get; set; }
         public string BloodGroup { get; set; }
         public PatientType PatientType { get; set; }
         public string Occupation { get; set; }
