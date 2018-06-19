@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Net.Mail;
 using System.Net;
-using System.Linq;
 
 namespace CloudMedics.Infrastructure
 {
