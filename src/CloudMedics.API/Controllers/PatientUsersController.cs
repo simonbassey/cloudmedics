@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using CouldMedics.Services.Abstractions;
 using System.Linq;
 using CloudMedics.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CloudMedics.API.Controllers
 {
     [Route("api/users/patients")]
+    [Authorize]
     public class PatientUsersController : Controller
     {
         private readonly IPatientUserService _patientUserService;
