@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
+using CloudMedics.Data.Repositories;
 
 namespace CloudMedics.Data.Mock.Repositories
 {
@@ -53,6 +54,12 @@ namespace CloudMedics.Data.Mock.Repositories
             var mockRoleManager = new Mock<RoleManager<IdentityRole>>();
 
             return mockRoleManager;
+        }
+
+        public static Mock<IPatientUserRepository> GetPatientRepository()
+        {
+            var mockPatientUserRepository = new Mock<IPatientUserRepository>();
+            return mockPatientUserRepository;
         }
 
     }

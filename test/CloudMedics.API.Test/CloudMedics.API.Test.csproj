@@ -34,4 +34,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UserAccountControllerTest.cs" />
+  </ItemGroup>
 </Project>

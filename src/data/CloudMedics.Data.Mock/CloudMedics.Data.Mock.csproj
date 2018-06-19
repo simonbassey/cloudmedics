@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CloudMedics.Entities\CloudMedics.Domain.csproj" />
+    <ProjectReference Include="..\CloudMedics.Data\CloudMedics.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="data\users.json" />

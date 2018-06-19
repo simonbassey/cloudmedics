@@ -19,8 +19,9 @@ namespace CloudMedics.API.Test
             var roleManager = RepositoryMocks.GetRoleManager().Object;
             var passwordHasher = RepositoryMocks.GetIPasswordHasher().Object;
             var logger = RepositoryMocks.GetLogger<AccountService>().Object;
+            var patientRepository = RepositoryMocks.GetPatientRepository().Object;
             IConfiguration configuration = TestHelper.GetApplicationConfiguration() as IConfiguration;
-            IAccountService userService = new AccountService(userManager, roleManager, passwordHasher, configuration, logger);
+            IAccountService userService = new AccountService(userManager, roleManager, passwordHasher, configuration, logger, patientRepository);
 
             UserAccountController accountController = new UserAccountController(userService);
 
