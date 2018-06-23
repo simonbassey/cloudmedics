@@ -43,6 +43,8 @@ namespace CloudMedics.API
             }).AddJwtBearer(options => options.ConfigureJWTBearerOptions(Configuration));
 
             services.AddCors(options => options.ConfigureCorsPolicy());
+            services.Configure<IISOptions>(config =>
+                                           config.ForwardClientCertificate = false);
             //register framework services
             services.AddMvc();
             //register application services
