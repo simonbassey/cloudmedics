@@ -3,7 +3,8 @@ using CloudMedics.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using ExpenseMgr.Data;
+using CloudMedics.Data.Helpers;
 
 namespace CloudMedics.Data
 {
@@ -21,7 +22,9 @@ namespace CloudMedics.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("Server = localhost; User =root; password=p@ssword001; Database=CloudMedicsDb");
+            IConfiguration configuration = ConfigSettingsHelper.GetConfiguration();
+            var connectionString = configuration.GetConnectionString("cloudmedicsDbConnection");
+            optionsBuilder.UseMySql(connectionString);
             base.OnConfiguring(optionsBuilder);
         }
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CloudMedics.Data
 {
-    public interface IRepository<T> where T: class
+    public interface IRepository<T> where T : class
     {
         Task<T> Add(T entity);
         Task<int> Add(IEnumerable<T> tEntities);

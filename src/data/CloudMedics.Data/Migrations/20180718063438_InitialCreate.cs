@@ -5,47 +5,10 @@ using System.Collections.Generic;
 
 namespace CloudMedics.Data.Migrations
 {
-    public partial class migv2AddedIdentity : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Doctors_Users_UserAccountUserId",
-                table: "Doctors");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Patients_Users_UserAccountUserId",
-                table: "Patients");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Patients_UserAccountUserId",
-                table: "Patients");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Doctors_UserAccountUserId",
-                table: "Doctors");
-
-            migrationBuilder.DropColumn(
-                name: "UserAccountUserId",
-                table: "Patients");
-
-            migrationBuilder.DropColumn(
-                name: "UserAccountUserId",
-                table: "Doctors");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserAccountId",
-                table: "Patients",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserAccountId",
-                table: "Doctors",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -87,13 +50,11 @@ namespace CloudMedics.Data.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.UniqueConstraint("AK_AspNetUsers_UserId", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,15 +163,81 @@ namespace CloudMedics.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Patients_UserAccountId",
-                table: "Patients",
-                column: "UserAccountId");
+            migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    DoctorId = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProfileSummary = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.DoctorId);
+                    table.ForeignKey(
+                        name: "FK_Doctors_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patients",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    BloodGroup = table.Column<string>(nullable: true),
+                    Occupation = table.Column<string>(nullable: true),
+                    PatientType = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patients", x => x.PatientId);
+                    table.ForeignKey(
+                        name: "FK_Patients_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(nullable: false),
+                    DoctorId = table.Column<int>(nullable: false),
+                    AilmentDescription = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false),
+                    ScheduledDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Symptoms = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => new { x.PatientId, x.DoctorId });
+                    table.ForeignKey(
+                        name: "FK_Appointments_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "DoctorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "PatientId",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Doctors_UserAccountId",
-                table: "Doctors",
-                column: "UserAccountId");
+                name: "IX_Appointments_DoctorId",
+                table: "Appointments",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -249,32 +276,21 @@ namespace CloudMedics.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Doctors_AspNetUsers_UserAccountId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_UserId",
                 table: "Doctors",
-                column: "UserAccountId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "UserId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Patients_AspNetUsers_UserAccountId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_UserId",
                 table: "Patients",
-                column: "UserAccountId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Doctors_AspNetUsers_UserAccountId",
-                table: "Doctors");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Patients_AspNetUsers_UserAccountId",
-                table: "Patients");
+            migrationBuilder.DropTable(
+                name: "Appointments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -292,84 +308,16 @@ namespace CloudMedics.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Doctors");
+
+            migrationBuilder.DropTable(
+                name: "Patients");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Patients_UserAccountId",
-                table: "Patients");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Doctors_UserAccountId",
-                table: "Doctors");
-
-            migrationBuilder.DropColumn(
-                name: "UserAccountId",
-                table: "Patients");
-
-            migrationBuilder.DropColumn(
-                name: "UserAccountId",
-                table: "Doctors");
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "UserAccountUserId",
-                table: "Patients",
-                nullable: true);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "UserAccountUserId",
-                table: "Doctors",
-                nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(nullable: false),
-                    AccountStatus = table.Column<int>(nullable: false),
-                    AccountType = table.Column<int>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: false),
-                    DateOfBirth = table.Column<DateTime>(nullable: true),
-                    EmailAddress = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    Gender = table.Column<char>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    LastUpdate = table.Column<DateTime>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Patients_UserAccountUserId",
-                table: "Patients",
-                column: "UserAccountUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Doctors_UserAccountUserId",
-                table: "Doctors",
-                column: "UserAccountUserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Doctors_Users_UserAccountUserId",
-                table: "Doctors",
-                column: "UserAccountUserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Patients_Users_UserAccountUserId",
-                table: "Patients",
-                column: "UserAccountUserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
         }
     }
 }
